@@ -1,8 +1,10 @@
+using System.Linq;
 using osu.Framework.Allocation;
 using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Graphics.Pooling;
+using osu.Game.Audio;
 using osu.Game.Beatmaps;
 using osu.Game.Graphics;
 using osu.Game.Rulesets.Judgements;
@@ -43,6 +45,8 @@ namespace osu.Game.Rulesets.Sentakki.UI
 
         internal readonly Container AccentContainer;
 
+        private readonly KiaiColorBlast colorBlast;
+
         public static readonly float[] LANEANGLES =
         {
             22.5f,
@@ -64,6 +68,7 @@ namespace osu.Game.Rulesets.Sentakki.UI
             Size = new Vector2(RINGSIZE);
             AddRangeInternal(new Drawable[]
             {
+                colorBlast = new KiaiColorBlast(),
                 explosionPool = new DrawablePool<HitExplosion>(8),
                 judgementPool = new DrawablePool<DrawableSentakkiJudgement>(8),
                 AccentContainer = new Container
@@ -153,6 +158,9 @@ namespace osu.Game.Rulesets.Sentakki.UI
 
             if (judgedObject.HitObject.Kiai)
                 ring.KiaiBeat();
+
+            if (judgedObject is DrawableTouchHold && (judgedObject.HitObject.Kiai || judgedObject.HitObject.Samples.Any(s => s.Name == HitSampleInfo.HIT_FINISH)))
+                colorBlast.PerformColorBlast();
 
             var explosion = explosionPool.Get(e => e.Apply(sentakkiHitObject));
             explosionLayer.Add(explosion);
