@@ -9,6 +9,8 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
 {
     public partial class DrawableSlide : DrawableSentakkiHitObject
     {
+        public new Slide HitObject => (Slide)base.HitObject;
+
         public override bool DisplayResult => false;
 
         public Container<DrawableSlideBody> SlideBodies = null!;
@@ -43,6 +45,11 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
                     Origin = Anchor.Centre,
                 }
             });
+        }
+
+        // This shouldn't play any samples
+        protected override void LoadSamples()
+        {
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)

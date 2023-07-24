@@ -14,17 +14,7 @@ namespace osu.Game.Rulesets.Sentakki.Objects
     {
         protected override bool NeedBreakSample => false;
 
-        private IList<IList<HitSampleInfo>> nodeSamples = new List<IList<HitSampleInfo>>();
-
-        public IList<IList<HitSampleInfo>> NodeSamples
-        {
-            get => nodeSamples;
-            set
-            {
-                Samples = value.Last();
-                nodeSamples = value;
-            }
-        }
+        public IList<IList<HitSampleInfo>> NodeSamples { get; set; } = new List<IList<HitSampleInfo>>();
 
         public double EndTime
         {
@@ -41,7 +31,7 @@ namespace osu.Game.Rulesets.Sentakki.Objects
                 Break = Break,
                 StartTime = StartTime,
                 Lane = Lane,
-                Samples = nodeSamples.Any() ? nodeSamples.First() : new List<HitSampleInfo>(),
+                Samples = NodeSamples.Any() ? NodeSamples.First() : Samples,
                 ColourBindable = ColourBindable.GetBoundCopy(),
             });
         }
