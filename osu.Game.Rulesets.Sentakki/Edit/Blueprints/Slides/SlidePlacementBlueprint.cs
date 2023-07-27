@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using osu.Framework.Allocation;
+using osu.Framework.Bindables;
 using osu.Framework.Graphics;
 using osu.Framework.Graphics.Containers;
 using osu.Framework.Input.Events;
@@ -57,9 +58,12 @@ namespace osu.Game.Rulesets.Sentakki.Edit.Blueprints.Slides
         private SlideBodyInfo previewSlideBodyInfo = null!;
         private int currentLaneOffset;
 
+        private Bindable<SlideBodyPart> currentPart = new Bindable<SlideBodyPart>();
+
         protected override void LoadComplete()
         {
-            slidePlacementToolbox.CurrentPartBindable.BindValueChanged(v =>
+            currentPart.BindTo(slidePlacementToolbox.CurrentPartBindable);
+            currentPart.BindValueChanged(v =>
             {
                 previewSlideBodyInfo = new SlideBodyInfo
                 {
@@ -144,7 +148,7 @@ namespace osu.Game.Rulesets.Sentakki.Edit.Blueprints.Slides
 
                 if (targetPathOffset != newPo)
                 {
-                    slidePlacementToolbox.RequestLaneChange(newPo);
+                    slidePlacementToolbox.RequestLaneChange(newPo, true);
                     targetPathOffset = newPo;
                 }
             }
