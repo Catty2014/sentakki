@@ -4,7 +4,7 @@ using System;
 
 namespace osu.Game.Rulesets.Sentakki;
 
-public partial class SentakkiUpdateManager : SimpleGameUpdateManager
+public partial class SentakkiUpdateManager : SimpleUpdateManager
 {
     protected override string GitHubUrl => "https://api.github.com/repos/LumpBloom7/sentakki/releases/latest";
 
