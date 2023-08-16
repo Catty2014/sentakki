@@ -24,7 +24,13 @@ namespace osu.Game.Rulesets.Sentakki.Objects
 
                 return max;
             }
-            set => throw new NotSupportedException();
+            set
+            {
+                double ratio = value / Duration;
+
+                foreach (var slide in SlideInfoList)
+                    slide.Duration *= ratio;
+            }
         }
 
         public IList<IList<HitSampleInfo>> NodeSamples = new List<IList<HitSampleInfo>>();
@@ -45,7 +51,7 @@ namespace osu.Game.Rulesets.Sentakki.Objects
             {
                 LaneBindable = { BindTarget = LaneBindable },
                 StartTime = StartTime,
-                Samples = NodeSamples.Any() ? NodeSamples.First() : new List<HitSampleInfo>(),
+                Samples = NodeSamples.Any() ? NodeSamples.First() : Samples,
                 Break = Break
             });
             createSlideBodies();

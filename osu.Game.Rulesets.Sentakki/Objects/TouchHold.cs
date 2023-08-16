@@ -4,6 +4,7 @@ using System.Linq;
 using osu.Game.Audio;
 using osu.Game.Rulesets.Objects.Types;
 using osu.Game.Rulesets.Scoring;
+using osuTK.Graphics;
 
 namespace osu.Game.Rulesets.Sentakki.Objects
 {
@@ -18,6 +19,8 @@ namespace osu.Game.Rulesets.Sentakki.Objects
         public double Duration { get; set; }
 
         protected override HitWindows CreateHitWindows() => HitWindows.Empty;
+
+        public override Color4 DefaultNoteColour => Color4.White;
 
         public override IList<HitSampleInfo> AuxiliarySamples => CreateHoldSample();
 

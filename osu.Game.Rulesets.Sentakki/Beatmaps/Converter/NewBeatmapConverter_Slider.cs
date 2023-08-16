@@ -115,7 +115,8 @@ public partial class NewBeatmapConverter
                 var chosen = nextChoices.First();
 
                 durationLeft -= chosen.MinDuration * velocityAdjustmentFactor;
-                parts.Add(lastPart = chosen.SlidePart);
+
+                parts.Add((lastPart = chosen.SlidePart).Value);
             }
 
             if (!parts.Any())
@@ -153,13 +154,14 @@ public partial class NewBeatmapConverter
         if (previousPart is null)
             return true;
 
-        if (previousPart.Shape != SlidePaths.PathShapes.Circle)
+
+        if (previousPart.Value.Shape != SlidePaths.PathShapes.Circle)
             return true;
 
-        if (part.Mirrored != previousPart.Mirrored)
+        if (part.Mirrored != previousPart.Value.Mirrored)
             return true;
 
-        return previousPart.EndOffset == 0;
+        return previousPart.Value.EndOffset == 0;
     }
 
     // This checks whether a slider can be completed without moving the mouse at all.
