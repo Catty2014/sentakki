@@ -12,7 +12,7 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
         public override bool DisplayResult => false;
 
         public Container<DrawableSlideBody> SlideBodies = null!;
-        public Container<DrawableSlideTap> SlideTaps = null!;
+        public Container<DrawableTap> SlideTaps = null!;
 
         public new Slide HitObject => (Slide)base.HitObject;
 
@@ -39,12 +39,16 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                 },
-                SlideTaps = new Container<DrawableSlideTap>
+                SlideTaps = new Container<DrawableTap>
                 {
                     Anchor = Anchor.Centre,
                     Origin = Anchor.Centre,
                 }
             });
+        }
+        protected override void LoadSamples()
+        {
+            // The slide parent object doesn't need a sample
         }
 
         protected override void CheckForResult(bool userTriggered, double timeOffset)
@@ -70,6 +74,12 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
                         AutoBindable = { BindTarget = AutoBindable },
                     };
 
+                case Tap y:
+                    return new DrawableTap(y)
+                    {
+                        AutoBindable = { BindTarget = AutoBindable },
+                    };
+
                 case SlideBody slideBody:
                     return new DrawableSlideBody(slideBody)
                     {
@@ -90,7 +100,11 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
                     SlideBodies.Add(body);
                     break;
 
-                case DrawableSlideTap tap:
+                case DrawableSlideTap slideTap:
+                    SlideTaps.Child = slideTap;
+                    break;
+
+                case DrawableTap tap:
                     SlideTaps.Child = tap;
                     break;
             }
