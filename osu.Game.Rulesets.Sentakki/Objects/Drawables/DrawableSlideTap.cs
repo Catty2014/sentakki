@@ -38,10 +38,12 @@ namespace osu.Game.Rulesets.Sentakki.Objects.Drawables
 
             double spinDuration = baseline_spin_duration * (DrawableSentakkiRuleset?.GameplaySpeed ?? 1);
 
-            if (ParentHitObject is DrawableSlide slide)
-                spinDuration += slide.HitObject.SlideInfoList.FirstOrDefault()?.Duration ?? 1000;
+            if (ParentHitObject is DrawableSlide slide && slide.HitObject.SlideInfoList.Count > 0)
+            {
+                spinDuration += slide.HitObject.SlideInfoList[0].Duration;
 
-            note.Stars.Spin(spinDuration, RotationDirection.Counterclockwise).Loop();
+                note.Stars.Spin(spinDuration, RotationDirection.Counterclockwise).Loop();
+            }
         }
     }
 }
