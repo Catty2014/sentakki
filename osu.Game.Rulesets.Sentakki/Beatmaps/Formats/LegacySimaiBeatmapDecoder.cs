@@ -73,11 +73,7 @@ public class LegacySimaiBeatmapDecoder : LegacyBeatmapDecoder
 
         HitSampleInfo hitSampleInfo = hitObject.Ex ? soft : normal;
 
-        if (hitObject is Slide slide)
-        {
-            slide.NodeSamples = new IList<HitSampleInfo>[] { new[] { hitSampleInfo } };
-        }
-        else if (hitObject is Hold hold)
+        if (hitObject is Hold hold)
         {
             hold.NodeSamples = new IList<HitSampleInfo>[] { new[] { hitSampleInfo, soft } };
         }
@@ -144,21 +140,22 @@ public class LegacySimaiBeatmapDecoder : LegacyBeatmapDecoder
     private SentakkiHitObject? noteToHitObject(double time, Note note, ControlPointInfo controlPointInfo)
     {
         bool isBreak = note.type == NoteType.Break;
+        var senNoteType = note.type;
 
         if (note.IsStar || note.slidePaths.Count > 0)
         {
-            note.type = NoteType.Slide;
+            senNoteType = NoteType.Slide;
         }
         else if (note.location.group != NoteGroup.Tap)
         {
-            note.type = NoteType.Touch;
+            senNoteType = NoteType.Touch;
         }
         else
         {
-            note.type = note.length != null ? NoteType.Hold : NoteType.Tap;
+            senNoteType = note.length != null ? NoteType.Hold : NoteType.Tap;
         }
 
-        switch (note.type)
+        switch (senNoteType)
         {
             case NoteType.Tap:
                 return new Tap
@@ -204,6 +201,13 @@ public class LegacySimaiBeatmapDecoder : LegacyBeatmapDecoder
                     Break = isBreak,
                     Ex = note.IsEx,
                 };
+
+                if (note.type is NoteType.ForceInvalidate)
+                    slide.TapType = Slide.TapTypeEnum.None;
+
+                if (note.appearance is NoteAppearance.ForceNormal)
+                    slide.TapType = Slide.TapTypeEnum.Tap;
+
                 // Currently Sentakki's head of slide is always a star
                 attachSlideBodies(slide, note, controlPointInfo);
                 return slide;
